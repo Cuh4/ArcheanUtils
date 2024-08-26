@@ -2,6 +2,11 @@
 ; // ------- Seat
 ; // ---------------------------------------------------------------------
 
+; Example:
+; var $MySeat = @Seat_New("SeatAlias", "HingeAlias")
+; $MySeat.@Seat_Update() # update the seat object. required to read inputs
+; $MySeat.@Seat_SetSeatHinge(1) # sets the rotation of the seat's hinge (if any)
+
 ; Creates a new seat object
 ; $alias: The alias of the seat
 ; $hingeAlias: The alias of the seat hinge if any

@@ -2,6 +2,12 @@
 ; // ------- Wheel
 ; // ---------------------------------------------------------------------
 
+; Example:
+; var $MyWheel = @Wheel_New("WheelAlias", "PivotAlias")
+; $MyWheel.@Wheel_Update() # updates the wheel object
+; $MyWheel.@Wheel_SetPivotAngle(1) # sets the wheel's pivot's rotation (if any)
+; $MyWheel.@Wheel_Accelerate(0.5) # sets the wheel's acceleration
+
 ; Creates a new wheel object
 ; $alias: The alias for the wheel
 ; $pivotAlias: The alias for the wheel pivot if any

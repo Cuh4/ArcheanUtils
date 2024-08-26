@@ -2,6 +2,8 @@
 ; // ------- Stabilization
 ; // ---------------------------------------------------------------------
 
+; This was created for my motorcycle vehicle. You won't need this and probably shouldn't use this either way.
+
 include "pid.xc"
 
 ; Creates a new roll stabilization management object
@@ -38,9 +40,6 @@ function @RollStabilization_Update($self: text, $goal: number): text
 	
 	; Stabilize
 	var $result = -clamp(@PID($goal, $self.Roll, 0.5, 0, 0.1), -1, 1)
-	print("PID	ROLL	GOAL")
-	print($result, $self.Roll, $goal)
-
 	$self.@RollStabilization_ChangeControl($result)
 	
 	; Return
