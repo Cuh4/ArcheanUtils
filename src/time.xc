@@ -99,7 +99,7 @@ function @Time_TimestampToDate($timestamp: number): text
 		
 	; Plop into key-value pair
 	var $data = ""
-	$data.Day = $days
+	$data.Day = $days + 1
 	$data.Month = $month + 1
 	$data.Year = $year
 	
