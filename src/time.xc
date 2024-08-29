@@ -1,15 +1,18 @@
 ; // ---------------------------------------------------------------------
-; // ------- Timestamp
+; // ------- Time
 ; // ---------------------------------------------------------------------
 
 ; // Variables
+
 array $daysInMonth: number
 array $daysInMonthLeapYear: number
+array $monthNames: text
 
 ; // Main
-; Would be called in `init`, but stupid circular dependencies cockblocks that from happening
-function @Utils_PopulateDaysArrays()
-	; normal year
+
+; Populates numerous arrays
+function @Time_PopulateArrays()
+	; For a normal year
 	if $daysInMonth.size == 0
 		$daysInMonth.append(31)
 		$daysInMonth.append(28)
@@ -24,7 +27,7 @@ function @Utils_PopulateDaysArrays()
 		$daysInMonth.append(30)
 		$daysInMonth.append(31)
 	
-	; leap year
+	; For a leap year
 	if $daysInMonthLeapYear.size == 0
 		$daysInMonthLeapYear.append(31)
 		$daysInMonthLeapYear.append(29)
@@ -38,18 +41,32 @@ function @Utils_PopulateDaysArrays()
 		$daysInMonthLeapYear.append(31)
 		$daysInMonthLeapYear.append(30)
 		$daysInMonthLeapYear.append(31)
+		
+	; Month names
+	if $monthNames.size == 0
+		$monthNames.append("January")
+		$monthNames.append("February")
+		$monthNames.append("March")
+		$monthNames.append("April")
+		$monthNames.append("June")
+		$monthNames.append("July")
+		$monthNames.append("August")
+		$monthNames.append("September")
+		$monthNames.append("October")
+		$monthNames.append("November")
+		$monthNames.append("December")
 
 ; Returns if a year is a leap year
 ; $year: The year to check
-function @Utils_IsLeapYear($year: number): number
+function @Time_IsLeapYear($year: number): number
 	var $isLeap = ($year % 4 == 0 and $year % 100 != 0) or ($year % 400 == 0)
 	return $isLeap
 		
 ; Converts a unix timestamp to a formatted date
 ; $timestamp: The timestamp to convert
-function @Utils_TimestampToDate($timestamp: number): text
+function @Time_TimestampToDate($timestamp: number): text
 	; Setup
-	@Utils_PopulateDaysArrays()
+	@Time_PopulateArrays()
 
 	var $secondsInDay = 86400
 	var $days = floor($timestamp / $secondsInDay)
@@ -59,7 +76,7 @@ function @Utils_TimestampToDate($timestamp: number): text
 	
 	; Calculate current year
 	while 1
-		var $yearDays = 365 + @Utils_IsLeapYear($year)
+		var $yearDays = 365 + @Time_IsLeapYear($year)
 		
 		if $days < $yearDays
 			break
@@ -70,7 +87,7 @@ function @Utils_TimestampToDate($timestamp: number): text
 	; Calculate current month
 	var $month = 0 ; 0 = 1st month
 	
-	if @Utils_IsLeapYear($year)
+	if @Time_IsLeapYear($year)
 		while $days >= $daysInMonth.$month
 			$days -= $daysInMonth.$month
 			$month++
@@ -79,6 +96,16 @@ function @Utils_TimestampToDate($timestamp: number): text
 			$days -= $daysInMonthLeapYear.$month
 			$month++
 		
-	; Format
-	$month = $month + 1
-	return text("{00}/{00}/{}", $days, $month, $year)
+	; Plop into key-value pair
+	var $data = ""
+	$data.Day = $days
+	$data.Month = $month + 1
+	$data.Year = $year
+	
+	; Return
+	return $data
+	
+; Converts a month (eg: 1) to its name (eg: "January")
+; $month: The month to convert
+function @Time_MonthToMonthName($month: number): text
+	return $monthNames.$month
