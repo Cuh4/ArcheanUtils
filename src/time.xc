@@ -48,6 +48,7 @@ function @Time_PopulateArrays()
 		$monthNames.append("February")
 		$monthNames.append("March")
 		$monthNames.append("April")
+		$monthNames.append("May")
 		$monthNames.append("June")
 		$monthNames.append("July")
 		$monthNames.append("August")
@@ -108,4 +109,5 @@ function @Time_TimestampToDate($timestamp: number): text
 ; Converts a month (eg: 1) to its name (eg: "January")
 ; $month: The month to convert
 function @Time_MonthToMonthName($month: number): text
+	$month = $month - 1
 	return $monthNames.$month
