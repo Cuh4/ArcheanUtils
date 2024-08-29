@@ -89,12 +89,12 @@ function @Time_TimestampToDate($timestamp: number): text
 	var $month = 0 ; 0 = 1st month
 	
 	if @Time_IsLeapYear($year)
-		while $days >= $daysInMonth.$month
-			$days -= $daysInMonth.$month
-			$month++
-	else
 		while $days >= $daysInMonthLeapYear.$month
 			$days -= $daysInMonthLeapYear.$month
+			$month++
+	else
+		while $days >= $daysInMonth.$month
+			$days -= $daysInMonth.$month
 			$month++
 		
 	; Plop into key-value pair
