@@ -8,6 +8,8 @@
 ; $MyWheel.@Wheel_SetPivotAngle(1) # sets the wheel's pivot's rotation (if any)
 ; $MyWheel.@Wheel_Accelerate(0.5) # sets the wheel's acceleration
 
+; // Main
+
 ; Creates a new wheel object
 ; $alias: The alias for the wheel
 ; $pivotAlias: The alias for the wheel pivot if any

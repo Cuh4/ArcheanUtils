@@ -4,7 +4,11 @@
 
 ; This was created for my motorcycle vehicle. You won't need this and probably shouldn't use this either way.
 
+; // Includes
+
 include "pid.xc"
+
+; // Main
 
 ; Creates a new roll stabilization management object
 ; $gyroAlias: The alias for the gyroscope

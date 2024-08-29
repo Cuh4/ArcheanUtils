@@ -7,6 +7,8 @@
 ; $MyLight.@Light_Toggle(0) # turn off
 ; $MyLight.@Light_SetColor(255, 0, 0) # set color to red
 
+; // Main
+
 ; Creates a new light object
 ; $alias: The alias for the lamp/spotlight
 function @Light_New($alias: text): text
