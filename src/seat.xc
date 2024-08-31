@@ -3,16 +3,15 @@
 ; // ---------------------------------------------------------------------
 
 ; Example:
-; var $MySeat = @Seat_New("SeatAlias", "HingeAlias")
-; $MySeat.@Seat_Update() # update the seat object. required to read inputs
-; $MySeat.@Seat_SetSeatHinge(1) # sets the rotation of the seat's hinge (if any)
+; var $MySeat = @Seat_New("SeatAlias")
+; $MySeat.@Seat_Update() ; update the seat object. required to read inputs
 
 ; // Main
 
 ; Creates a new seat object
 ; $alias: The alias of the seat
 ; $hingeAlias: The alias of the seat hinge if any
-function @Seat_New($alias: text, $hingeAlias: text): text
+function @Seat_New($alias: text): text
 	var $seat = ""
 	$seat.Alias = $alias
 	$seat.Occupied = 0
@@ -23,7 +22,6 @@ function @Seat_New($alias: text, $hingeAlias: text): text
 	$seat.Roll = 0
 	$seat.Yaw = 0
 	$seat.Thrust = 0
-	$seat.HingeAlias = $hingeAlias
 
 	return $seat
 
@@ -50,11 +48,4 @@ function @Seat_Update($self: text): text
 	$self.Button9 = input_number($self.Alias, 9 + 7)
 	$self.Button10 = input_number($self.Alias, 10 + 7)
 	
-	return $self
-
-; Rotates a seat's hinge if any
-; $self: The seat
-; $to: The desired angle
-function @Seat_SetSeatHinge($self: text, $to: number): text
-	output_number($self.HingeAlias, 0, $to)
 	return $self
