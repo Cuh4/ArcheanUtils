@@ -13,8 +13,15 @@
 function @pump_New($alias: text): text
 	var $pump = ""
 	$pump.Alias = $alias
+	$pump.Flow = 0
 
 	return $pump
+
+; Updates a pump object
+; $self: The pump to update
+function @Pump_Update($self: text): text
+	$self.Flow = input_number($self.Alias, 0)
+	return $self
 	
 ; Sets a pump's power
 ; $self: The pump to manipulate
