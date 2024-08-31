@@ -10,7 +10,7 @@
 
 ; Creates a new pump object
 ; $alias: The pump alias
-function @pump_New($alias: text): text
+function @Pump_New($alias: text): text
 	var $pump = ""
 	$pump.Alias = $alias
 	$pump.Flow = 0
