@@ -10,7 +10,6 @@
 
 ; Creates a new seat object
 ; $alias: The alias of the seat
-; $hingeAlias: The alias of the seat hinge if any
 function @Seat_New($alias: text): text
 	var $seat = ""
 	$seat.Alias = $alias

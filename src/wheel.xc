@@ -3,20 +3,17 @@
 ; // ---------------------------------------------------------------------
 
 ; Example:
-; var $MyWheel = @Wheel_New("WheelAlias", "PivotAlias")
+; var $MyWheel = @Wheel_New("WheelAlias")
 ; $MyWheel.@Wheel_Update() # updates the wheel object
-; $MyWheel.@Wheel_SetPivotAngle(1) # sets the wheel's pivot's rotation (if any)
 ; $MyWheel.@Wheel_Accelerate(0.5) # sets the wheel's acceleration
 
 ; // Main
 
 ; Creates a new wheel object
 ; $alias: The alias for the wheel
-; $pivotAlias: The alias for the wheel pivot if any
-function @Wheel_New($alias: text, $pivotAlias: text): text
+function @Wheel_New($alias: text): text
 	var $wheel = ""
 	$wheel.Alias = $alias
-	$wheel.PivotAlias = $pivotAlias
 	$wheel.RotationSpeed = 0
 	$wheel.GroundFriction = 0
 
@@ -28,13 +25,6 @@ function @Wheel_Update($self: text): text
 	$self.RotationSpeed = input_number($self.Alias, 0)
 	$self.GroundFriction = input_number($self.Alias, 1)
 	
-	return $self
-	
-; Sets the wheel's pivot angle
-; $self: The wheel object
-; $to: The desired angle, -1 to 1
-function @Wheel_SetPivotAngle($self: text, $to: number): text
-	output_number($self.PivotAlias, 0, $to)
 	return $self
 	
 ; Sets the steering of a wheel
