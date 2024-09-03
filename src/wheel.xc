@@ -33,7 +33,14 @@ function @Wheel_Update($self: text): text
 function @Wheel_Steer($self: text, $steer: number): text
 	output_number($self.Alias, 1, $steer)
 	return $self
-	
+		
+; Sets the gearbox of a wheel
+; $self: The wheel object
+; $gearbox: The gearbox value
+function @Wheel_SetGearbox($self: text, $gearbox: number): text
+	output_number($self.Alias, 4, $gearbox)
+	return $self
+
 ; Sets the acceleration of a wheel
 ; $self: The wheel object
 ; $acceleration: The amount to accelerate, -1 to 1. Values below 0 = reverse
