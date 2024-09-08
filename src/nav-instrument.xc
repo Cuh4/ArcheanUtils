@@ -8,6 +8,7 @@
 ; $alias: The alias of the nav instrument
 function @NavInstrument_New($alias: text): text
 	var $navInstrument = ""
+	$navInstrument.Alias = $alias
 	$navInstrument.ForwardAirspeed = 0
 	$navInstrument.VerticalSpeed = 0
 	$navInstrument.Altitude = 0
@@ -77,11 +78,11 @@ function @NavInstrument_Update($self: text): text
 	
 ; Set locate mode settings
 ; $self: The nav instrument object
-; $distance: The celestial distance
 ; $celestial: The celestial to target
-; $directionX: The direction X
-; $directionY: The direction Y
-; $directionZ: The direction Z
+; $distance: The distance to the custom target
+; $directionX: The direction X to custom target
+; $directionY: The direction Y to custom target
+; $directionZ: The direction Z to custom target
 ; $forwardVector: The forward vector config. 0 = forward, +1 = up, -1 = down
 function @NavInstrument_SetLocate($self: text, $celestial: text, $distance: number, $directionX: number, $directionY: number, $directionZ: number, $forwardVector: number): text
 	output_text($self.Alias, 0, $celestial)
