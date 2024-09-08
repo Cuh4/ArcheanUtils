@@ -25,6 +25,7 @@ For linting, etc, you'll need [this](https://github.com/batcholi/XenonCode/raw/m
 - `dashboard.xc` A library for interacting with dashboards and reading button presses, etc. Alias only, no IO port support.
 - `gyro.xc` A library for interacting with gyroscopes. Alias only, no IO port support.
 - `nav-instrument.xc` A library for interacting with the Nav Instrument component. Alias only, no IO port support.
+- `beacon.xc` A library for interacting with the Beacon component. It is not possible to set the beacon frequency as text via this library. Alias only, no IO port support.
 
 ## ✨ Credit
 - [Cuh4](https://github.com/Cuh4)
