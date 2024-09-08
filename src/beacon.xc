@@ -21,7 +21,7 @@ function @Beacon_New($alias: text): text
 ; Updates a beacon object. This is to be called in `update`
 ; $self: The beacon object
 function @Beacon_Update($self: text): text
-	$self.IncomingData = input_number($self.Alias, 0) or input_text($self.Alias, 0)
+	$self.IncomingData = input_text($self.Alias, 0)
 	$self.Distance = input_number($self.Alias, 1)
 	$self.DirectionX = input_number($self.Alias, 2)
 	$self.DirectionY = input_number($self.Alias, 3)
