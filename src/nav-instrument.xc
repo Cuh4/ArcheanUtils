@@ -83,13 +83,18 @@ function @NavInstrument_Update($self: text): text
 ; $directionX: The direction X to custom target
 ; $directionY: The direction Y to custom target
 ; $directionZ: The direction Z to custom target
-; $forwardVector: The forward vector config. 0 = forward, +1 = up, -1 = down
-function @NavInstrument_SetLocate($self: text, $celestial: text, $distance: number, $directionX: number, $directionY: number, $directionZ: number, $forwardVector: number): text
+function @NavInstrument_SetLocate($self: text, $celestial: text, $distance: number, $directionX: number, $directionY: number, $directionZ: number): text
 	output_text($self.Alias, 0, $celestial)
 	output_number($self.Alias, 1, $distance)
 	output_number($self.Alias, 2, $directionX)
 	output_number($self.Alias, 3, $directionY)
 	output_number($self.Alias, 4, $directionZ)
-	output_number($self.Alias, 5, $forwardVector)
 
+	return $self
+	
+; Set forward vector
+; $self: The nav instrument object
+; $forwardVector: The forward vector config. 0 = forward, +1 = up, -1 = down
+function @NavInstrument_SetForwardVector($self: text, $forwardVector: number): text
+	output_number($self.Alias, 5, $forwardVector)
 	return $self
