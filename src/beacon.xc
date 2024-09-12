@@ -9,6 +9,8 @@
 function @Beacon_New($alias: text): text
 	var $beacon = ""
 	$beacon.Alias = $alias
+	$beacon.ReceiveFrequency = 0
+	$beacon.TransmitFrequency = 0
 	$beacon.IncomingData = ""
 	$beacon.Distance = 0
 	$beacon.DirectionX = 0
@@ -43,5 +45,9 @@ function @Beacon_Transmit($self: text, $data: text): text
 ; $receive: The receiving frequency
 function @Beacon_SetFrequencies($self: text, $transmit: number, $receive: number): text
 	output_number($self.Alias, 1, $transmit)
+	$self.TransmitFrequency = $transmit
+
 	output_number($self.Alias, 2, $receive)
+	$self.ReceiveFrequency = $receive
+
 	return $self
