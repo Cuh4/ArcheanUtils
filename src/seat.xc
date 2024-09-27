@@ -22,6 +22,17 @@ function @Seat_New($alias: text): text
 	$seat.Yaw = 0
 	$seat.Thrust = 0
 
+	$seat.Button1 = 0
+	$self.Button2 = 0
+	$self.Button3 = 0
+	$self.Button4 = 0
+	$self.Button5 = 0
+	$self.Button6 = 0
+	$self.Button7 = 0
+	$self.Button8 = 0
+	$self.Button9 = 0
+	$self.Button10 = 0
+
 	return $seat
 
 ; Updates a seat object
