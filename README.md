@@ -15,7 +15,7 @@ For linting, etc, you'll need [this](https://github.com/batcholi/XenonCode/raw/m
 - `battery.xc` A library for reading the battery component in an OOP manner. Alias only, no IO port support.
 - `door.xc` A library for making doors using pivots and dashboards. This was made for a truck I made and this likely won't be useful to you as a result.  Aliases only, no IO port support.
 - `light.xc` A library for interacting with lights in an OOP manner. Alias only, no IO port support.
-- `PID.XC` A library containing a single function for running a PID. Taken from the XenonCode nodes system.
+- `PID.xc` A library containing a single function for running a PID. Taken from the XenonCode nodes system.
 - `pump.xc` A library for manipulating pumps in an OOP manner. Alias only, no IO port support.
 - `seat.xc` A library for reading seats in an OOP manner. Alias only, no IO port support.
 - `text.xc` A library that adds much needed text utility functions.
