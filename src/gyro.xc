@@ -21,7 +21,7 @@ function @Gyro_SetSpeed($self: text, $speed: number): text
 	
 ; Set the gyro control
 ; $self: The gyro object
-; $control: The speed, -1 to 1
+; $control: The control, -1 to 1
 function @Gyro_SetControl($self: text, $control: number): text
 	output_number($self.Alias, 1, $control)
 	return $self
