@@ -1,2 +1,6 @@
+src linguist-generated
+text=auto
+eol=lf
+
 *.xc linguist-language=php
 *.xc linguist-detectable=true
