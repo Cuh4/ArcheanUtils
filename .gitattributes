@@ -1,1 +1,2 @@
 *.xc linguist-language=php
+*.xc linguist-detectable=true
