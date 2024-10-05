@@ -120,7 +120,7 @@ function @BeaconLocator_Render($self: text, $screen: screen, $beacon: text): tex
 		$screen.text_size(1)
 		$screen.@BeaconLocator_RenderCenteredText($screen.width / 2, $screen.height / 2 + 17, white, "Ensure the receiving frequency is correct")
 		
-		$screen.@BeaconLocator_RenderCenteredText($screen.width / 2, $screen.height / 2 + 27, color(65, 65, 75), text("Freq: {}"), $beacon.ReceiveFrequency)
+		$screen.@BeaconLocator_RenderCenteredText($screen.width / 2, $screen.height / 2 + 27, color(65, 65, 75), text("Freq: {}", $beacon.ReceiveFrequency))
 
 	; Show title
 	var $titleHeight = 16
