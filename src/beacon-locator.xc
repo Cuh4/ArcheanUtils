@@ -92,18 +92,13 @@ function @BeaconLocator_Render($self: text, $screen: screen, $beacon: text): tex
 	$circleY -= ($beacon.DirectionY * 500) + 70
 	
 	var $radius = 10
-	$radius = clamp($radius + $beacon.Distance / 7, 25, 200)
+	$radius = clamp($radius + $beacon.Distance / 125, 25, 45)
 
 	$screen.draw_circle($circleX, $circleY, $radius, $color)
 	
 	; Direction line
-	var $lineOffsetX = $beacon.DirectionX * 500
-	var $lineOffsetY = $beacon.DirectionY * 500 + 70
-	var $lineGoalX = $screen.width / 2 + $lineOffsetX
-	var $lineGoalY = $screen.height / 2 - $lineOffsetY
-
-	$screen.draw_line($screen.width / 2, $screen.height / 2, $lineGoalX, $lineGoalY, color(100, 100, 125))
-	$screen.draw_rect($lineGoalX - 2, $lineGoalY - 2, $lineGoalX + 2, $lineGoalY + 2, 0, color(100, 100, 125))
+	$screen.draw_line($screen.width / 2, $screen.height / 2, $circleX, $circleY, color(100, 100, 125))
+	$screen.draw_rect($circleX - 3, $circleY - 3, $circleX + 3, $circleY + 3, 0, color(100, 100, 125))
 	
 	; Show distance
 	var $distanceTextY = $circleY + $radius + $screen.char_h + 4
@@ -120,15 +115,17 @@ function @BeaconLocator_Render($self: text, $screen: screen, $beacon: text): tex
 		$screen.blank(0)
 	
 		$screen.text_size(3)
-		$screen.@BeaconLocator_RenderCenteredText($screen.width / 2, $screen.height / 2, color(75, 65, 65), "No signal!"))
+		$screen.@BeaconLocator_RenderCenteredText($screen.width / 2, $screen.height / 2, color(75, 65, 65), "No signal!")
 
 		$screen.text_size(1)
-		$screen.@BeaconLocator_RenderCenteredText($screen.width / 2, $screen.height / 2 + $screen.char_h + 10, white, "Ensure the receiving frequency is correct")
+		$screen.@BeaconLocator_RenderCenteredText($screen.width / 2, $screen.height / 2 + 17, white, "Ensure the receiving frequency is correct")
+		
+		$screen.@BeaconLocator_RenderCenteredText($screen.width / 2, $screen.height / 2 + 27, color(65, 65, 75), text("Freq: {}"), $beacon.ReceiveFrequency)
 
 	; Show title
 	var $titleHeight = 16
 	$screen.draw_rect(80, 0, $screen.width - 80, $titleHeight, 0, color(5, 5, 5, 150))
-	$screen.@BeaconLocator_RenderCenteredText($screen.width / 2, $titleHeight / 2, white, "Beacon Locator"))
+	$screen.@BeaconLocator_RenderCenteredText($screen.width / 2, $titleHeight / 2, white, "Beacon Locator")
 
 	; Return
 	return $self
