@@ -1,5 +1,5 @@
 ; // ---------------------------------------------------------------------
-; // ------- RCS
+; // ------- RCS Controller
 ; // ---------------------------------------------------------------------
 
 ; Example:
@@ -22,14 +22,14 @@
 ; 	$RCSController.@RCSController_Rotate(1, 0, 0) ; Pitch down
 ; 	$RCSController.@RCSController_Translate(1, 0, -1) ; Go forward (1), and down (-1)
 ;
-; 	$RCSController.@RCSController_ControlRCS("FL", 0, 0, 1) ; Control all front-left RCS components to propel up (don't call this method, let the controller do its thing)
+; 	$RCSController.@RCSController_ControlRCS("Front", 0, 0, 1) ; Control all front-left RCS components to propel up (don't call this method, let the controller do its thing)
 
 ; // Main
 
 ; Creates a new RCS controller object (tip: H2 is the best fuel to use for RCS, produces the most force)
-; RCS placement: top = nozzle 1, bottom = nozzle 2, left side = nozzle 4, right side = nozzle 3, front = nozzle 0
+; RCS placement: top = 1, bottom = 2, left side = 4, right side = 3, front = 0
 ; $angularVelocitySensorAlias: The alias for the angular velocity sensor. Sensor specs: +X = Pitch Forward, +Y = Yaw Right, +Z = Roll Right
-function @RCSController_New($angularVelocitySensorAlias: text): text
+function @RCS_New($angularVelocitySensorAlias: text): text
 	; Create object
 	var $RCSController = ""
 	
@@ -42,6 +42,9 @@ function @RCSController_New($angularVelocitySensorAlias: text): text
 	$RCSController.AngVelPitchMultiplier = 1 ; For inverting
 	$RCSController.AngVelYawMultiplier = -1 ; For inverting
 	$RCSController.AngVelRollMultiplier = 1 ; For inverting
+	
+	; Aliases
+	$RCSController.RCSAliasPrefix = "RCS"
 
 	; Rotation
 	$RCSController.DesiredPitch = 0 ; Desired = What the user wants the RCS controller to do
@@ -66,16 +69,20 @@ function @RCSController_New($angularVelocitySensorAlias: text): text
 	$RCSController.YawRate = 0 ; Ang Vel Y
 	$RCSController.RollRate = 0 ; Ang Vel Z
 
+	$RCSController.AngVelPitchMultiplier = 1 ; For inverting
+	$RCSController.AngVelYawMultiplier = -1 ; For inverting
+	$RCSController.AngVelRollMultiplier = 1 ; For inverting
+
 	; Return object
 	return $RCSController
 	
 ; Control a RCS nozzle
 ; $self: The RCS controller object
-; $location: The RCS location (main part of alias, eg: "FL1", "BR", "FR", "FL", etc)
+; $location: The RCS location (main part of alias, eg: "Front", "Back", etc)
 ; $longitudinal: Forward/backwards thrust
 ; $horizontal: Horizontal thrust
 ; $vertical: Vertical thrust
-function @RCSController_ControlRCS($self: text, $location: text, $longitudinal: number, $horizontal: number, $vertical: number): text
+function @RCS_ControlRCS($self: text, $location: text, $longitudinal: number, $horizontal: number, $vertical: number): text
 	output_number($self.RCSAliasPrefix & $location & "*", 0, $longitudinal * $self.On * $self.RCSPower)
 
 	output_number($self.RCSAliasPrefix & $location & "*", 4, -$horizontal * $self.On * $self.RCSPower)
@@ -88,7 +95,7 @@ function @RCSController_ControlRCS($self: text, $location: text, $longitudinal: 
 	
 ; Updates the RCS controller object
 ; $self: The RCS controller object
-function @RCSController_Update($self: text): text
+function @RCS_Update($self: text): text
 	; Update sensor
 	$self.PitchRate = input_number($self.AngularVelocitySensorAlias, 0) * $self.AngVelPitchMultiplier
 	$self.YawRate = input_number($self.AngularVelocitySensorAlias, 1) * $self.AngVelYawMultiplier
@@ -110,17 +117,17 @@ function @RCSController_Update($self: text): text
 	else
 		$self.SystemYaw = -$self.YawRate * 3 * $self.AutoStabPower
 		
-	; Update RCS (Front Left)
-	$self.@RCSController_ControlRCS("FL", ($self.SystemYaw + $self.DesiredHorizontal) / 2, ($self.SystemYaw + $self.DesiredLongitudinal) / 2, (-$self.SystemPitch + $self.SystemRoll + $self.DesiredVertical) / 3)
+	; Update RCS (Front)
+	$self.@RCS_ControlRCS("Front", -$self.DesiredLongitudinal, ($self.SystemYaw + $self.DesiredHorizontal) / 2, (-$self.SystemPitch + $self.DesiredVertical) / 2)
 	
-	; Update RCS (Front Right)
-	$self.@RCSController_ControlRCS("FR", (-$self.SystemYaw + -$self.DesiredHorizontal) / 2, ($self.SystemYaw + -$self.DesiredLongitudinal) / 2, (-$self.SystemPitch + -$self.SystemRoll + $self.DesiredVertical) / 3)
+	; Update RCS (Left)
+	$self.@RCS_ControlRCS("Left", $self.DesiredHorizontal, ($self.SystemYaw + $self.DesiredLongitudinal) / 2, ($self.SystemRoll + $self.DesiredVertical) / 2)
 	
-	; Update RCS (Back Left)
-	$self.@RCSController_ControlRCS("BL", (-$self.SystemYaw + $self.DesiredHorizontal) / 2, ($self.SystemYaw + $self.DesiredLongitudinal) / 2, ($self.SystemPitch + $self.SystemRoll + $self.DesiredVertical) / 3)
+	; Update RCS (Right)
+	$self.@RCS_ControlRCS("Right", -$self.DesiredHorizontal, ($self.SystemYaw + -$self.DesiredLongitudinal) / 2, (-$self.SystemRoll + $self.DesiredVertical) / 2)
 	
-	; Update RCS (Back Right)
-	$self.@RCSController_ControlRCS("BR", ($self.SystemYaw + -$self.DesiredHorizontal) / 2, ($self.SystemYaw + -$self.DesiredLongitudinal) / 2, ($self.SystemPitch + -$self.SystemRoll + $self.DesiredVertical) / 3)
+	; Update RCS (Back)
+	$self.@RCS_ControlRCS("Back", $self.DesiredLongitudinal, ($self.SystemYaw + -$self.DesiredHorizontal) / 2, ($self.SystemPitch + $self.DesiredVertical) / 2)
 	
 	; Pumps
 	output_number($self.RCSAliasPrefix & "Pump", 0, $self.On:number * $self.PumpPower * 0.1)
@@ -133,7 +140,7 @@ function @RCSController_Update($self: text): text
 ; $pitch: The desired pitch
 ; $yaw: The desired yaw
 ; $roll: The desired roll
-function @RCSController_Rotate($self: text, $pitch: number, $yaw: number, $roll: number): text
+function @RCS_Rotate($self: text, $pitch: number, $yaw: number, $roll: number): text
 	$self.DesiredPitch = $pitch
 	$self.DesiredYaw = $yaw
 	$self.DesiredRoll = $roll
@@ -145,7 +152,7 @@ function @RCSController_Rotate($self: text, $pitch: number, $yaw: number, $roll:
 ; $longitudinal: Desired forwards/backwards
 ; $horizontal: Desired left/right
 ; $vertical: Desired up/down
-function @RCSController_Translate($self: text, $longitudinal: number, $horizontal: number, $vertical: number): text
+function @RCS_Translate($self: text, $longitudinal: number, $horizontal: number, $vertical: number): text
 	$self.DesiredLongitudinal = $longitudinal
 	$self.DesiredHorizontal = $horizontal
 	$self.DesiredVertical = $vertical
