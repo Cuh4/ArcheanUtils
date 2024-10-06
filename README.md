@@ -29,6 +29,7 @@ For linting, etc, you'll need [this](https://github.com/batcholi/XenonCode/raw/m
 - `beacon-locator.xc` A library for displaying beacon positions onto a transparent HUD. 
 - `toggle.xc` A library for easily converting pulse signals (eg: a seat button) to a toggle.
 - `propeller.xc` A library for interacting with the propeller component in an OOP manner. Alias only, no IO port support.
+- `logging.xc` A library for sending neatly formatted logs via `print()`.
 
 ## ✨ Credit
 - [Cuh4](https://github.com/Cuh4)
