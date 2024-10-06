@@ -3,14 +3,21 @@
 ; // ---------------------------------------------------------------------
 
 ; Example:
-; var $LightsToggle = @Toggle_New()
+; storage var $LightsToggle: text
+; $LightsToggle.@Toggle_New()
 ; $LightsToggle.@Toggle_Pulse(1)
 ; print($LightsToggle.On)
 
 ; // Main
 
 ; Creates a new toggle
-function @Toggle_New(): text
+; $toggle: The text to turn into a toggle
+function @Toggle_New($text: text): text
+	; Already created, so return it
+	if $text
+		return $text
+
+	; Not created, so create one
 	var $toggle = ""
 	$toggle.Last = 0
 	$toggle.On = 0
