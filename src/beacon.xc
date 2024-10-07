@@ -36,7 +36,7 @@ function @Beacon_Update($self: text): text
 ; $self: The beacon object
 ; $data: The data to transmit
 function @Beacon_Transmit($self: text, $data: text): text
-	output_number($self.Alias, 0, $data)
+	output_text($self.Alias, 0, $data)
 	return $self
 
 ; Set the frequencies for a beacon
