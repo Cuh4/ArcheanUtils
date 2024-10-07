@@ -29,16 +29,18 @@
 ; Creates a new RCS controller object (tip: H2 is the best fuel to use for RCS, produces the most force)
 ; RCS placement: top = 1, bottom = 2, left side = 4, right side = 3, front = 0
 ; $angularVelocitySensorAlias: The alias for the angular velocity sensor. Sensor specs: +X = Pitch Forward, +Y = Yaw Right, +Z = Roll Right
-function @RCS_New($angularVelocitySensorAlias: text): text
+function @RCSController_New($angularVelocitySensorAlias: text): text
 	; Create object
 	var $RCSController = ""
 	
 	; Settings
 	$RCSController.On = 1
+	$RCSController.AutoStab = 1
 	$RCSController.RCSPower = 1 ; 0 to 1
 	$RCSController.PumpPower = 1 ; 0 to 1
 	$RCSController.AutoStabPower = 0.6 ; 0 to 1
 	$RCSController.RCSAliasPrefix = "RCS"
+	$RCSController.AngularVelocitySensorAlias = $angularVelocitySensorAlias
 	$RCSController.AngVelPitchMultiplier = 1 ; For inverting
 	$RCSController.AngVelYawMultiplier = -1 ; For inverting
 	$RCSController.AngVelRollMultiplier = 1 ; For inverting
@@ -62,16 +64,10 @@ function @RCS_New($angularVelocitySensorAlias: text): text
 	
 	; no system translation here since there's no translation auto-stabilization (not much of a point in space)
 	
-	; Sensor
-	$RCSController.AngularVelocitySensorAlias = $angularVelocitySensorAlias
-
+	; Sensor Info
 	$RCSController.PitchRate = 0 ; Ang Vel X
 	$RCSController.YawRate = 0 ; Ang Vel Y
 	$RCSController.RollRate = 0 ; Ang Vel Z
-
-	$RCSController.AngVelPitchMultiplier = 1 ; For inverting
-	$RCSController.AngVelYawMultiplier = -1 ; For inverting
-	$RCSController.AngVelRollMultiplier = 1 ; For inverting
 
 	; Return object
 	return $RCSController
@@ -82,7 +78,7 @@ function @RCS_New($angularVelocitySensorAlias: text): text
 ; $longitudinal: Forward/backwards thrust
 ; $horizontal: Horizontal thrust
 ; $vertical: Vertical thrust
-function @RCS_ControlRCS($self: text, $location: text, $longitudinal: number, $horizontal: number, $vertical: number): text
+function @RCSController_ControlRCS($self: text, $location: text, $longitudinal: number, $horizontal: number, $vertical: number): text
 	output_number($self.RCSAliasPrefix & $location & "*", 0, $longitudinal * $self.On * $self.RCSPower)
 
 	output_number($self.RCSAliasPrefix & $location & "*", 4, -$horizontal * $self.On * $self.RCSPower)
@@ -95,7 +91,7 @@ function @RCS_ControlRCS($self: text, $location: text, $longitudinal: number, $h
 	
 ; Updates the RCS controller object
 ; $self: The RCS controller object
-function @RCS_Update($self: text): text
+function @RCSController_Update($self: text): text
 	; Update sensor
 	$self.PitchRate = input_number($self.AngularVelocitySensorAlias, 0) * $self.AngVelPitchMultiplier
 	$self.YawRate = input_number($self.AngularVelocitySensorAlias, 1) * $self.AngVelYawMultiplier
@@ -105,29 +101,29 @@ function @RCS_Update($self: text): text
 	if $self.DesiredPitch
 		$self.SystemPitch = $self.DesiredPitch
 	else
-		$self.SystemPitch = -$self.PitchRate * 3 * $self.AutoStabPower
+		$self.SystemPitch = -$self.PitchRate * 3 * $self.AutoStabPower * $self.AutoStab
 		
 	if $self.DesiredRoll
 		$self.SystemRoll = $self.DesiredRoll
 	else
-		$self.SystemRoll = -$self.RollRate * 3 * $self.AutoStabPower
+		$self.SystemRoll = -$self.RollRate * 3 * $self.AutoStabPower * $self.AutoStab
 	
 	if $self.DesiredYaw
 		$self.SystemYaw = $self.DesiredYaw
 	else
-		$self.SystemYaw = -$self.YawRate * 3 * $self.AutoStabPower
+		$self.SystemYaw = -$self.YawRate * 3 * $self.AutoStabPower * $self.AutoStab
 		
 	; Update RCS (Front)
-	$self.@RCS_ControlRCS("Front", -$self.DesiredLongitudinal, ($self.SystemYaw + $self.DesiredHorizontal) / 2, (-$self.SystemPitch + $self.DesiredVertical) / 2)
+	$self.@RCSController_ControlRCS("Front", -$self.DesiredLongitudinal, ($self.SystemYaw + $self.DesiredHorizontal) / 2, (-$self.SystemPitch + $self.DesiredVertical) / 2)
 	
 	; Update RCS (Left)
-	$self.@RCS_ControlRCS("Left", $self.DesiredHorizontal, ($self.SystemYaw + $self.DesiredLongitudinal) / 2, ($self.SystemRoll + $self.DesiredVertical) / 2)
+	$self.@RCSController_ControlRCS("Left", $self.DesiredHorizontal, ($self.SystemYaw + $self.DesiredLongitudinal) / 2, ($self.SystemRoll + $self.DesiredVertical) / 2)
 	
 	; Update RCS (Right)
-	$self.@RCS_ControlRCS("Right", -$self.DesiredHorizontal, ($self.SystemYaw + -$self.DesiredLongitudinal) / 2, (-$self.SystemRoll + $self.DesiredVertical) / 2)
+	$self.@RCSController_ControlRCS("Right", -$self.DesiredHorizontal, ($self.SystemYaw + -$self.DesiredLongitudinal) / 2, (-$self.SystemRoll + $self.DesiredVertical) / 2)
 	
 	; Update RCS (Back)
-	$self.@RCS_ControlRCS("Back", $self.DesiredLongitudinal, ($self.SystemYaw + -$self.DesiredHorizontal) / 2, ($self.SystemPitch + $self.DesiredVertical) / 2)
+	$self.@RCSController_ControlRCS("Back", $self.DesiredLongitudinal, ($self.SystemYaw + -$self.DesiredHorizontal) / 2, ($self.SystemPitch + $self.DesiredVertical) / 2)
 	
 	; Pumps
 	output_number($self.RCSAliasPrefix & "Pump", 0, $self.On:number * $self.PumpPower * 0.1)
@@ -140,7 +136,7 @@ function @RCS_Update($self: text): text
 ; $pitch: The desired pitch
 ; $yaw: The desired yaw
 ; $roll: The desired roll
-function @RCS_Rotate($self: text, $pitch: number, $yaw: number, $roll: number): text
+function @RCSController_Rotate($self: text, $pitch: number, $yaw: number, $roll: number): text
 	$self.DesiredPitch = $pitch
 	$self.DesiredYaw = $yaw
 	$self.DesiredRoll = $roll
@@ -152,7 +148,7 @@ function @RCS_Rotate($self: text, $pitch: number, $yaw: number, $roll: number): 
 ; $longitudinal: Desired forwards/backwards
 ; $horizontal: Desired left/right
 ; $vertical: Desired up/down
-function @RCS_Translate($self: text, $longitudinal: number, $horizontal: number, $vertical: number): text
+function @RCSController_Translate($self: text, $longitudinal: number, $horizontal: number, $vertical: number): text
 	$self.DesiredLongitudinal = $longitudinal
 	$self.DesiredHorizontal = $horizontal
 	$self.DesiredVertical = $vertical
