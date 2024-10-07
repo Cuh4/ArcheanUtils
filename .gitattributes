@@ -1,0 +1,4 @@
+* text=auto
+
+*.xc linguist-language=AutoIt
+*.xc  eol=lf
