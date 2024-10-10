@@ -11,7 +11,7 @@
 ; // Main
 
 ; Creates a new toggle
-; $toggle: The text to turn into a toggle
+; $text: The text to turn into a toggle
 function @Toggle_New($text: text): text
 	; Already created, so return it
 	if $text
