@@ -2,6 +2,8 @@
 ; // ------- Beacon Locator
 ; // ---------------------------------------------------------------------
 
+; Dependencies: beacon.xc
+
 ; // Main
 
 ; Create a new beacon locator object
