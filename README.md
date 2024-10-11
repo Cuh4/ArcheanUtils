@@ -32,6 +32,7 @@ For linting, etc, you'll need [this](https://github.com/batcholi/XenonCode/raw/m
 - `logging.xc` A library for sending neatly formatted logs via `print()`.
 - `RCS-controller.xc` An **incredibly** useful library for controlling multiple RCS components. Comes with auto-stabilization, configuration, and easy setup. Tuning may be required. Aliases only, no IO port support.
 - `docking-port.xc` A library for interacting with the docking port component. Alias only, no IO port support.
+- `signature.xc` A library for broadcasting information about your vehicle along with custom data in a standardized format.
 
 ## ✨ Credit
 - [Cuh4](https://github.com/Cuh4)
