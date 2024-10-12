@@ -9,7 +9,7 @@
 ## 📚 Overview
 A repo containing all of the utility scripts I've made for Archean with XenonCode. They mostly follow OOP.
 
-For linting, etc, you'll need [this](https://github.com/batcholi/XenonCode/raw/master/build/xenoncode.exe). More information can be found at the XenonCode [docs](https://wiki.archean.space/xenoncode/documentation.html#testing-xenoncode).
+For XenonCode linting in VSCode with the extension, you'll need [this](https://github.com/batcholi/XenonCode/raw/master/build/xenoncode.exe). More information can be found at the XenonCode [docs](https://wiki.archean.space/xenoncode/documentation.html#testing-xenoncode).
 
 ## 📑 Libraries
 - `battery.xc` A library for reading the battery component in an OOP manner. Alias only, no IO port support.
