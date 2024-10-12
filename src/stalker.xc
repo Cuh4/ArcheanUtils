@@ -72,7 +72,7 @@ function @Stalker_GetIndexViaFreq($frequency: number): text
 ; $self: The stalker object
 function @Stalker_Update($self: text): text
 	if !$self.Stalking
-		return
+		return $self
 		
 	; Set targets as var
 	var $targets = $self.Targets
