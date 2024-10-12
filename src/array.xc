@@ -100,9 +100,13 @@ function @Array_Insert($self: text, $index: number, $value: text): text
 	if $index < 0
 		@Array_Error("@Array_Insert: $index out of bounds (< 0)")
 		return $self
-	elseif $index > @Array_GetLastIndex($self)
+	elseif $index > @Array_GetNextIndex($self) ; not using @Array_GetLastIndex() here so the user can insert a value at index 0 when there are no values in the array
 		@Array_Error("@Array_Insert: $index out of bounds")
 		return $self
+		
+	; Increment index
+	if $index == 0
+		$self._Index++
 	
 	; Shift all values up (start from top)
 	var $max = @Array_GetLastIndex($self)
