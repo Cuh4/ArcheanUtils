@@ -102,7 +102,6 @@ function @Stalker_Update($self: text): text
 			
 			; Save target
 			var $targetIndex = @Stalker_GetIndexViaFreq($previousFrequency)
-			print($target)
 			$targets.$targetIndex = $target
 		
 		; Set frequency for next tick
