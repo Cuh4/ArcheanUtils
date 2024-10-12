@@ -61,3 +61,5 @@ function @Signature_Broadcast($self: text): text
 	$data.Payload = $self.Payload
 	
 	$beacon.@Beacon_Transmit($data)
+
+	return $self
