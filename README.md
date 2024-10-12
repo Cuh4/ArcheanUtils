@@ -34,6 +34,7 @@ For linting, etc, you'll need [this](https://github.com/batcholi/XenonCode/raw/m
 - `docking-port.xc` A library for interacting with the docking port component. Alias only, no IO port support.
 - `signature.xc` A library for broadcasting information about your vehicle along with custom data in a standardized format. **Requires `beacon.xc`**
 - `stalker.xc` A library for easily scanning frequencies using multiple beacons. Aliases only, no IO port support.
+- `array.xc` A library for creating arrays using key-value pairs. Unlike the built-in arrays, these can be passed into functions, created on the fly, etc. This also means arrays can be passed through beacons.
 
 ## ✨ Credit
 - [Cuh4](https://github.com/Cuh4)
