@@ -2,6 +2,8 @@
 ; // ------- Stalker
 ; // ---------------------------------------------------------------------
 
+; Dependencies: signature.xc
+
 ; Example
 ; var $stalker: text
 ; 
