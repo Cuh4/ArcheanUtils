@@ -109,8 +109,8 @@ function @Stalker_Update($self: text): text
 		
 	; Increment frequency
 	$self.At++
-	
-	if $self.At > $self.UpTo
+
+	if $self.At > $self.FrequencyChunkSize
 		$self.At = 0
 		
 	; Update targets
