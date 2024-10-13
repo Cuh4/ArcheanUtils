@@ -50,6 +50,7 @@ function @Stalker_New($aliasPrefix: text, $beaconCount: number, $upTo: number): 
 	$stalker.At = 0
 	$stalker.UpTo = $upTo
 	$stalker.Stalking = 0
+	$stalker.TargetCount = 0
 	$stalker.Targets = ""
 	
 	return $stalker
@@ -99,9 +100,13 @@ function @Stalker_Update($self: text): text
 			
 			; Create target
 			var $target = @Target_New($previousFrequency, $directionX, $directionY, $directionZ, $distance, $foundAt) ; subtract 1 from frequency due to beacon tick update delay
-			
+
 			; Save target
 			var $targetIndex = @Stalker_GetIndexViaFreq($previousFrequency)
+
+			if !$targets.$targetIndex
+				$self.TargetCount ++
+
 			$targets.$targetIndex = $target
 		
 		; Set frequency for next tick
