@@ -89,25 +89,33 @@ function @Stalker_Update($self: text): text
 		; Get alias of beacon
 		var $alias = $self.AliasPrefix & $beaconIndex:text
 		
+		; Get index for later
+		var $targetIndex = @Stalker_GetIndexViaFreq($previousFrequency)
+
 		; Check for signal
-		if input_number($alias, 5) and $previousFrequency != -1
-			; Read beacon
-			var $directionX = text("{0.00}", input_number($alias, 2)): number ; round to save chars, but precision is still needed so don't round much
-			var $directionY = text("{0.00}", input_number($alias, 3)): number ; round to save chars, but precision is still needed so don't round much
-			var $directionZ = text("{0.00}", input_number($alias, 4)): number ; round to save chars, but precision is still needed so don't round much
-			var $distance = round(input_number($alias, 1)) / 1000 ; round and divide to save chars
-			var $foundAt = round(time) ; round to save chars
-			
-			; Create target
-			var $target = @Target_New($previousFrequency, $directionX, $directionY, $directionZ, $distance, $foundAt) ; subtract 1 from frequency due to beacon tick update delay
+		if $previousFrequency != -1
+			if input_number($alias, 5)
+				; Read beacon
+				var $directionX = text("{0.00}", input_number($alias, 2)): number ; round to save chars, but precision is still needed so don't round much
+				var $directionY = text("{0.00}", input_number($alias, 3)): number ; round to save chars, but precision is still needed so don't round much
+				var $directionZ = text("{0.00}", input_number($alias, 4)): number ; round to save chars, but precision is still needed so don't round much
+				var $distance = round(input_number($alias, 1)) / 1000 ; round and divide to save chars
+				var $foundAt = round(time) ; round to save chars
+				
+				; Create target
+				var $target = @Target_New($previousFrequency, $directionX, $directionY, $directionZ, $distance, $foundAt) ; subtract 1 from frequency due to beacon tick update delay
 
-			; Save target
-			var $targetIndex = @Stalker_GetIndexViaFreq($previousFrequency)
+				; Save target
+				if !$targets.$targetIndex
+					$self.TargetCount ++
 
-			if !$targets.$targetIndex
-				$self.TargetCount ++
-
-			$targets.$targetIndex = $target
+				$targets.$targetIndex = $target
+			else
+				; Check if we saved the target
+				if $self.$targetIndex
+					; Target no longer exists, so remove
+					$targets.$targetIndex = ""
+					$targets.TargetCount--
 		
 		; Set frequency for next tick
 		output_number($alias, 2, $nextFrequency)
