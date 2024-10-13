@@ -112,7 +112,7 @@ function @Stalker_Update($self: text): text
 				$targets.$targetIndex = $target
 			else
 				; Check if we saved the target
-				if $self.$targetIndex
+				if $targets.$targetIndex
 					; Target no longer exists, so remove
 					$targets.$targetIndex = ""
 					$targets.TargetCount--
