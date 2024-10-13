@@ -22,12 +22,13 @@
 
 ; Creates a new target object representing a target found via a stalker
 ; $frequency: The frequency of the target
+; $data: The data received from beacon
 ; $directionX: The direction X
 ; $directionY: The direction Y
 ; $directionZ: The direction Z
 ; $distance: The distance of the target
 ; $foundAt: The timestamp the target was found
-function @Target_New($frequency: number, $directionX: number, $directionY: number, $directionZ: number, $distance: number, $foundAt: number): text
+function @Target_New($frequency: number, $data: text, $directionX: number, $directionY: number, $directionZ: number, $distance: number, $foundAt: number): text
 	var $target = ""
 	$target.Frequency = $frequency
 	$target.DirectionX = $directionX
@@ -35,6 +36,11 @@ function @Target_New($frequency: number, $directionX: number, $directionY: numbe
 	$target.DirectionZ = $directionZ
 	$target.Distance = $distance
 	$target.FoundAt = $foundAt
+	$target.HasSignature = @Signature_IsSignature($data)
+	
+	if $target.HasSignature
+		$target.Name = $data.Name
+		$target.Type = $data.Type
 	
 	return $target
 
@@ -96,6 +102,7 @@ function @Stalker_Update($self: text): text
 		if $previousFrequency != -1
 			if input_number($alias, 5)
 				; Read beacon
+				var $data = input_text($alias, 0)
 				var $directionX = text("{0.00}", input_number($alias, 2)): number ; round to save chars, but precision is still needed so don't round much
 				var $directionY = text("{0.00}", input_number($alias, 3)): number ; round to save chars, but precision is still needed so don't round much
 				var $directionZ = text("{0.00}", input_number($alias, 4)): number ; round to save chars, but precision is still needed so don't round much
@@ -103,7 +110,7 @@ function @Stalker_Update($self: text): text
 				var $foundAt = round(time) ; round to save chars
 				
 				; Create target
-				var $target = @Target_New($previousFrequency, $directionX, $directionY, $directionZ, $distance, $foundAt) ; subtract 1 from frequency due to beacon tick update delay
+				var $target = @Target_New($previousFrequency, $data, $directionX, $directionY, $directionZ, $distance, $foundAt) ; subtract 1 from frequency due to beacon tick update delay
 
 				; Save target
 				if !$targets.$targetIndex
