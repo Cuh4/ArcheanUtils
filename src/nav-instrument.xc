@@ -98,3 +98,10 @@ function @NavInstrument_SetLocate($self: text, $celestial: text, $distance: numb
 function @NavInstrument_SetForwardVector($self: text, $forwardVector: number): text
 	output_number($self.Alias, 5, $forwardVector)
 	return $self
+
+; Set the mode of the navigation instrument
+; $self: The nav instrument object
+; $mode: The mode to set. 0 = Off, 1 = Flight, 2 = Orbit, 3 = Locator
+function @NavInstrument_SetMode($self: text, $mode: number): text
+	output_number($self.Alias, 6, $mode)
+	return $self
