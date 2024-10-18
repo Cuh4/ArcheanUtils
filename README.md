@@ -35,6 +35,7 @@ For XenonCode linting in VSCode with the extension, you'll need [this](https://g
 - `signature.xc` A library for broadcasting information about your vehicle along with custom data in a standardized format. **Requires `beacon.xc`**
 - `stalker.xc` A library for easily scanning frequencies using multiple beacons. Aliases only, no IO port support.
 - `array.xc` A library for creating arrays using key-value pairs. Unlike the built-in arrays, these can be passed into functions, created on the fly, etc. This also means arrays can be passed through beacons.
+- `tertiary.xc` A library containing functions with the same behaviour as a tertiary operator.
 
 ## ✨ Credit
 - [Cuh4](https://github.com/Cuh4)
