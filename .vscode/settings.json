@@ -18,6 +18,5 @@
         "titleBar.activeForeground": "#15202b",
         "titleBar.inactiveBackground": "#d2b48c99",
         "titleBar.inactiveForeground": "#15202b99"
-    },
-    "editor.insertSpaces": false
+    }
 }
