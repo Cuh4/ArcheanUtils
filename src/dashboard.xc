@@ -18,10 +18,10 @@ function @Dashboard_New($alias: text): text
 function @Dashboard_IsPressed($self: text, $channel: number): number
 	return input_number($self.Alias, $channel)
 
-; Set a LED's state
+; Set an LED's state
 ; $self: The dashboard object
 ; $channel: The channel of the LED
 ; $on: Whether or not to turn the LED on
-function @Dashboard_SetLED($self: text, $channel: number, $on: number): number
+function @Dashboard_SetLED($self: text, $channel: number, $on: number): text
 	output_number($self.Alias, $channel, $on)
 	return $self
