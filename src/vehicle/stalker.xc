@@ -108,7 +108,7 @@ function @Stalker_Update($self: text): text
 				var $directionX = text("{0.00}", input_number($alias, 2)): number ; round to save chars, but precision is still needed so don't round much
 				var $directionY = text("{0.00}", input_number($alias, 3)): number ; round to save chars, but precision is still needed so don't round much
 				var $directionZ = text("{0.00}", input_number($alias, 4)): number ; round to save chars, but precision is still needed so don't round much
-				var $distance = text("{0.0}", input_number($alias, 1)) ; round to save chars
+				var $distance = text("{0.0}", input_number($alias, 1)): number ; round to save chars
 				var $foundAt = round(time) ; round to save chars
 				
 				; Create target
