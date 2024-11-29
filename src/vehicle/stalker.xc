@@ -123,7 +123,7 @@ function @Stalker_Update($self: text): text
 				; Check if we saved the target, if so, remove
 				if $targets.$targetIndex
 					$targets.$targetIndex = ""
-					$targets.TargetCount--
+					$self.TargetCount--
 		
 		; Set frequency for next tick
 		output_number($alias, 2, $nextFrequency)
