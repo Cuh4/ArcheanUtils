@@ -33,6 +33,8 @@ N/A
 - `docking-port.xc` A library for interacting with the docking port component. Alias only, no IO port support.
 - `signature.xc` A library for broadcasting information about your vehicle along with custom data in a standardized format. **Requires `beacon.xc`**
 - `stalker.xc` A library for easily scanning frequencies using multiple beacons. Aliases only, no IO port support.
+- `widgets.xc` A bunch of pre-made widgets you can draw to a screen via a simple function call. Dashboard screens only.
+- `buzzer.xc` A library for interacting with the buzzer component. Alias only, no IO port support.
 
 ### Shared (HUD + Vehicle)
 - `PID.xc` A library containing a single function for running a PID. Taken from the XenonCode nodes system.
