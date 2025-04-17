@@ -4,6 +4,44 @@
 
 ; // Main
 
+; Draws a burner on a stovetop
+; $screen: The screen to draw on
+; $x: The X coord to draw at
+; $y: The Y coord to draw at
+; $size: The size of the burner
+; $active: Whether or not the burner is on
+function @Widgets_StovetopBurner($screen: screen, $x: number, $y: number, $size: number, $active: number)
+	$screen.draw_circle($x, $y, $size, 0, color(5, 5, 5))
+	$screen.draw_circle($x, $y, $size - 2, 0, color(7, 7, 7))
+
+	if $active
+		$screen.draw_circle($x, $y, $size - 4, color(255, 100, 43), 0)
+		
+; Draws a fake stovetop. Yup. A fucking stovetop.
+; This covers the entire screen and blanks it automatically, so you'll need a dedicated screen for this widget.
+; $screen: The screen to draw on
+; $tl: If top left burner is active
+; $tr: If top right burner is active
+; $bl: If bottom left burner is active
+; $br: If bottom right burner is active
+function @Widgets_Stovetop($screen: screen, $tl: number, $tr: number, $bl: number, $br: number)
+	$screen.blank(color(0, 0, 0))
+
+	var $quarterWidth = $screen.width / 4
+	var $leftX = $quarterWidth
+	var $rightX = $screen.width - $quarterWidth
+	
+	var $quarterHeight = $screen.height / 4
+	var $topY = $quarterHeight
+	var $bottomY = $screen.height - $quarterHeight
+	
+	var $size = (($quarterHeight + $quarterHeight) / 2)
+	
+	$screen.@Widgets_StovetopBurner($leftX, $topY, $size, $tl)
+	$screen.@Widgets_StovetopBurner($rightX, $topY, $size, $tr)
+	$screen.@Widgets_StovetopBurner($leftX, $bottomY, $size, $bl)
+	$screen.@Widgets_StovetopBurner($rightX, $bottomY, $size, $br)
+
 ; Draws header text
 ; $screen: The screen to draw on
 ; $x: The X coord to draw at
