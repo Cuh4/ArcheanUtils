@@ -16,6 +16,28 @@ function @Widgets_HeaderText($screen: screen, $x: number, $y: number, $backgroun
 	$screen.draw_rect($x, $y, $x + 3, $y + $screen.char_h, 0, $headerColor)
 	$screen.write($x + $screen.char_w, $y, $textColor, $text)
 	
+; Draws a rectangular status icon
+; $screen: The screen to draw on
+; $x: The X coord to draw at
+; $y: The Y coord to draw at
+; $width: The width of the widget
+; $height: The height of the widget
+; $backgroundColor: The background color to use
+; $offColor: The color to show if status is 0
+; $onColor: The color to show if status is 1
+; $status: The status
+function @Widgets_RectStatus($screen: screen, $x: number, $y: number, $width: number, $height: number, $backgroundColor: number, $offColor: number, $onColor: number, $status: number)
+	$screen.draw_rect($x, $y, $x + $width, $y + $height, 0, $backgroundColor)
+	
+	var $color = 0
+	
+	if $status
+		$color = $onColor
+	else
+		$color = $offColor
+	
+	$screen.draw_rect($x + 3, $y + 3, $x + $width - 3, $y + $height - 3, 0, $color)
+	
 ; Draws a futuristic button, and returns if it is being pressed or not
 ; $screen: The screen to draw on
 ; $x: The X coord to draw at
@@ -63,7 +85,7 @@ function @Widgets_VerticalGradient($screen: screen, $x: number, $width: number, 
 	var $colorStartG = color_g($colorStart)
 	var $colorStartB = color_b($colorStart)
 	var $colorStartA = color_a($colorStart)
-
+	
 	var $colorEndR = color_r($colorEnd)
 	var $colorEndG = color_g($colorEnd)
 	var $colorEndB = color_b($colorEnd)
