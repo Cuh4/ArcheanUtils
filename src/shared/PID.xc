@@ -16,7 +16,7 @@ function @PID_New($P: number, $I: number, $D: number, $min: number, $max: number
 	$PID.I = $I
 	$PID.D = $D
 	$PID.LastTime = 0
-	$PID.Integral = 0 ; = Total error over time
+	$PID.Integral = 0
 	$PID.LastError = 0
 	$PID.Value = 0
 	$PID.Minimum = $min
@@ -30,6 +30,9 @@ function @PID_New($P: number, $I: number, $D: number, $min: number, $max: number
 ; $setPoint: The value to push $processVariable towards
 function @PID_Update($self: text, $processVariable: number, $setPoint: number): text
 	var $error = $setPoint - $processVariable
+	
+	if $self.LastTime == 0
+		$self.LastTime = time
 	
 	var $deltaTime = (time - $self.LastTime)
 	$self.LastTime = time
