@@ -88,7 +88,7 @@ function @Widgets_FuturisticButton($screen: screen, $x: number, $y: number, $bac
 	var $textWidth = size($text) * $screen.char_w
 	
 	; Background
-	var $pressed = $screen.button_rect($x, $y, $x + $textWidth, $y + $screen.char_h, 0, $backgroundColor)
+	var $pressed = $screen.button_rect($x - 1, $y - 1, $x + $textWidth + 1, $y + $screen.char_h + 1, 0, $backgroundColor)
 	
 	; Top left corner
 	var $cornerLineHeight = 3
@@ -142,3 +142,76 @@ function @Widgets_VerticalGradient($screen: screen, $x: number, $width: number, 
 		var $colorB = lerp($colorStartB, $colorEndB, $progress)
 		var $colorA = lerp($colorStartA, $colorEndA, $progress)
 		$screen.draw_rect($x, $y, $x + $width, $endY, 0, color($colorR, $colorG, $colorB, $colorA))
+		
+; Draws a futuristic screen background by drawing background tiles, fancy gradients and a small screen border.
+; This can really look nice with the right colors and screen background.
+; Blank the screen before using this, and you should really only draw this once if possible
+; $screen: The screen to draw on
+; $tileSize: The size of the individual background tiles. 50 is good
+; $gradientStep: The amount of pixels between each gradient bar
+; $gradientHeight: The height of the gradient, e.g: 25 pixels
+; $gradientColorStart: The beginning color of the top and bottom gradients
+; $gradientColorEnd: The end color of the top and bottom gradients
+; $tileColor: The color of the background tiles
+function @Widgets_FuturisticBackground($screen: screen, $tileSize: number, $gradientStep: number, $gradientHeight: number, $gradientColorStart: number, $gradientColorEnd: number, $tileColor: number)
+	; Draw background tiles
+	var $toX = $screen.width / $tileSize
+	var $toY = $screen.height / $tileSize
+
+	for 0, $toX ($x)
+		for 0, $toY ($y)
+			$screen.draw_rect($x * $tileSize, $y * $tileSize, $x * $tileSize + $tileSize, $y * $tileSize + $tileSize, $tileColor)
+	
+	; Gradients (top and bottom)
+	$screen.@Widgets_VerticalGradient(0, $screen.width, 0, $gradientHeight, $gradientStep, $gradientColorStart, $gradientColorEnd)
+	$screen.@Widgets_VerticalGradient(0, $screen.width, $screen.height, $screen.height - $gradientHeight, $gradientStep, $gradientColorStart, $gradientColorEnd)
+	
+	; Border
+	$screen.draw_rect(0, 0, $screen.width, $screen.height, color(25, 25, 25), 0)
+	
+; Draws a horizontal slider-ish element (think throttle lever).
+; Returns the user's input as -1 for value decrease, 0 for nothing, and 1 for value increase.
+; $screen: The screen to draw on
+; $x: The X coord to use
+; $y: The Y coord to use
+; $width: The width of this slider
+; $height: The height of this slider
+; $label: The text to display on the slider
+; $backgroundColor: The color of the slider's background
+; $progressColor: The color of the progress bar
+; $buttonColor: The color of the buttons
+; $textColor: The color of the label
+; $value: The value of this slider (0 - 1)
+function @Widgets_Slider($screen: screen, $x: number, $y: number, $width: number, $height: number, $label: text, $backgroundColor: number, $progressColor: number, $buttonColor: number, $textColor: number, $value: number): number
+	; Background
+	var $buttonGap = 4
+	var $buttonOffset = $width / 6
+
+	$screen.draw_rect($x + $buttonOffset + $buttonGap, $y, $x + $width - $buttonGap - $buttonOffset, $y + $height, 0, $backgroundColor)
+	
+	; Decrease button
+	var $valueDown = $screen.button_rect($x, $y, $x + $buttonOffset - $buttonGap, $y + $height, 0, $buttonColor)
+	$screen.write($x + 5, $y + $height / 2 - $screen.char_h / 2, $textColor, "<")
+	
+	; Increase button
+	var $valueUp = $screen.button_rect($x + $width + $buttonGap, $y, ($x + $width) - $buttonOffset, $y + $height, 0, $buttonColor)
+	$screen.write($x + $width - $screen.char_w - 5, $y + $height / 2 - $screen.char_h / 2, $textColor, ">")
+	
+	; Progress
+	var $progressPadding = 3
+	
+	var $progressStartX = $x + $buttonOffset + $buttonGap + $progressPadding
+	var $progressEndX = $x + $width - $buttonOffset - $buttonGap - $progressPadding
+	var $progressDiff = $progressEndX - $progressStartX
+	$screen.draw_rect($progressStartX, $y + 3, $progressStartX + ($progressDiff * $value), $y + $height - 3, 0, $progressColor)
+	
+	; Label
+	$screen.write(($x + ($width / 2)) - (size($label) * $screen.char_w) / 2 , $y + ($height / 2) - ($screen.char_h / 2), $textColor, $label)
+	
+	; Return
+	if $valueUp
+		return 1
+	elseif $valueDown
+		return -1
+	else
+		return 0
