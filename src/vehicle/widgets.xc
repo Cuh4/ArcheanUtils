@@ -2,6 +2,8 @@
 ; // ------- Widgets
 ; // ---------------------------------------------------------------------
 
+; Dependencies: shared/text.xc
+
 ; // Main
 
 ; Draws a burner on a stovetop
@@ -215,3 +217,29 @@ function @Widgets_Slider($screen: screen, $x: number, $y: number, $width: number
 		return -1
 	else
 		return 0
+		
+; Draws a stalker target (see `stalker.xc` in the ArcheanUtils repo you likely got this code from)
+; $screen: The screen to draw on
+; $x: The X coord to use
+; $y: The Y coord to use
+; $size: Used for both width and height
+; $backgroundColor: The background color
+; $textColor: The color of the text
+; $target: The stalker target data
+function @Widgets_StalkerTarget($screen: screen, $x: number, $y: number, $size: number, $backgroundColor: number, $textColor: number, $target: text)
+	$screen.draw_rect($x, $y, $x + $size, $y + $size, 0, $backgroundColor)
+	
+	$screen.@Widgets_HeaderText($x, $y, 0, $textColor, $textColor, "Freq " & $target.Frequency)
+	
+	var $detailX = $x + 10
+	var $textHeight = $screen.char_h + 2 ; with padding
+	
+	$screen.@Widgets_HeaderText($detailX, $y + $textHeight, 0, $textColor, $textColor, text("{0.0}km", $target.Distance))
+	$screen.@Widgets_HeaderText($detailX, $y + $textHeight * 2, 0, $textColor, $textColor, text("{0}s ago", time - $target.FoundAt))
+	
+	if !$target.HasSignature
+		$screen.@Widgets_HeaderText($detailX, $y + $textHeight * 3, 0, $textColor, $textColor, "Unknown")
+		return
+	
+	$screen.@Widgets_HeaderText($detailX, $y + $textHeight * 3, 0, $textColor, $textColor, @Text_Truncate(text("{}", $target.Name), round(($size / $screen.char_w) - 3), ".."))
+	$screen.@Widgets_HeaderText($detailX, $y + $textHeight * 4, 0, $textColor, $textColor, @Text_Truncate(text("[{}]", $target.Type), round(($size / $screen.char_w) - 3), ".."))
