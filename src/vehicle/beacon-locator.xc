@@ -2,7 +2,7 @@
 ; // ------- Beacon Locator
 ; // ---------------------------------------------------------------------
 
-; Dependencies: beacon.xc
+; Dependencies: vehicle/beacon.xc
 
 ; // Main
 

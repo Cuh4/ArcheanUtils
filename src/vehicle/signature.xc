@@ -2,7 +2,7 @@
 ; // ------- Signature
 ; // ---------------------------------------------------------------------
 
-; Dependencies: beacon.xc
+; Dependencies: vehicle/beacon.xc
 
 ; Example:
 ; var $signature: text

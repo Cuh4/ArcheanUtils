@@ -2,7 +2,7 @@
 ; // ------- Stalker
 ; // ---------------------------------------------------------------------
 
-; Dependencies: signature.xc
+; Dependencies: vehicle/signature.xc
 
 ; Example
 ; var $stalker: text
