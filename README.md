@@ -27,14 +27,18 @@ N/A
 - `gyro.xc` A library for interacting with gyroscopes. Alias only, no IO port support.
 - `nav-instrument.xc` A library for interacting with the Nav Instrument component. Alias only, no IO port support.
 - `beacon.xc` A library for interacting with the Beacon component. It is not possible to set the beacon frequency as text via this library. Alias only, no IO port support.
-- `beacon-locator.xc` A library for displaying beacon positions onto a transparent HUD. **Requires `beacon.xc`**
+- `beacon-locator.xc` A library for displaying beacon positions onto a transparent HUD. **Requires `vehicle/beacon.xc`**
 - `propeller.xc` A library for interacting with the propeller component in an OOP manner. Alias only, no IO port support.
 - `RCS-controller.xc` An **incredibly** useful library for controlling multiple RCS components. Comes with auto-stabilization, configuration, and easy setup. Tuning may be required. Aliases only, no IO port support.
 - `docking-port.xc` A library for interacting with the docking port component. Alias only, no IO port support.
-- `signature.xc` A library for broadcasting information about your vehicle along with custom data in a standardized format. **Requires `beacon.xc`**
+- `signature.xc` A library for broadcasting information about your vehicle along with custom data in a standardized format. **Requires `vehicle/beacon.xc`**
 - `stalker.xc` A library for easily scanning frequencies using multiple beacons. Aliases only, no IO port support.
 - `widgets.xc` A bunch of pre-made widgets you can draw to a screen via a simple function call. Dashboard screens only.
 - `buzzer.xc` A library for interacting with the buzzer component. Alias only, no IO port support.
+- `TEProtocol_Server.xc` A library for setting up a TEP server and listening for requests. Allows communication with multiple clients (one-way, but responses can be returned like HTTP) with one beacon on one frequency. Essentially HTTP in Archean (to an extent). **Requires `vehicle/beacon.xc`**, `vehicle/TEProtocol_Classes.xc`, `vehicle/TEProtocol_Shared.xc`
+- `TEProtocol_Client.xc` A library for sending requests to a TEP server. **Requires `vehicle/beacon.xc`**, `vehicle/TEProtocol_Classes.xc`, `vehicle/TEProtocol_Shared.xc`
+- `TEProtocol_Classes.xc` A library required by `TEProtocol_Server.xc` and `TEProtocol_Client.xc`.
+- `TEProtocol_Shared.xc` A library required by `TEProtocol_Server.xc` and `TEProtocol_Client.xc`.
 
 ### Shared (HUD + Vehicle)
 - `PID.xc` A library containing a single function for running a PID. Taken from the XenonCode nodes system.
