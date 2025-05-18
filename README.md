@@ -39,6 +39,7 @@ N/A
 - `TEProtocol_Client.xc` A library for sending requests to a TEP server. **Requires `vehicle/beacon.xc`**, `vehicle/TEProtocol_Classes.xc`, `vehicle/TEProtocol_Shared.xc`
 - `TEProtocol_Classes.xc` A library required by `TEProtocol_Server.xc` and `TEProtocol_Client.xc`.
 - `TEProtocol_Shared.xc` A library required by `TEProtocol_Server.xc` and `TEProtocol_Client.xc`.
+- `turret.xc` A library to easily setup and control a turret with pivots, a beacon, and a nav instrument.
 
 ### Shared (HUD + Vehicle)
 - `PID.xc` A library containing a single function for running a PID. Taken from the XenonCode nodes system.
@@ -46,7 +47,7 @@ N/A
 - `time.xc` A library for messing with timestamps.
 - `toggle.xc` A library for easily converting pulse signals (eg: a seat button) to a toggle.
 - `logging.xc` A library for sending neatly formatted logs via `print()`.
-- `array.xc` A library for creating arrays using key-value pairs. Unlike the built-in arrays, these can be passed into functions, created on the fly, etc. This also means arrays can be passed through beacons.
+- `KVArray.xc` A library for creating arrays using key-value pairs. Unlike the built-in arrays, these can be passed into functions, created on the fly, etc. This also means arrays can be passed through beacons.
 - `tertiary.xc` A library containing functions with the same behaviour as a tertiary operator.
 
 ## ✨ Credit
