@@ -8,19 +8,29 @@
 
 ; Create a new turret
 ; $aliasPrefix: The prefix of all turret-related component aliases
-; $invertAzimuth: Whether or not to invert
-; $invertElevation: Whether or not to invert
-function @Turret_New($aliasPrefix: text, $invertAzimuth: number, $invertElevation: number): text
+; $invertAzimuth: Whether or not to invert the azimuth pivot
+; $invertElevation: Whether or not to invert the elevation pivot
+; $invertRestingAzimuth: Whether or not to invert the azimuth pivot when the turret goes to rest
+; $invertRestingElevation: Whether or not to invert the elevation pivot when the turret goes to rest
+; $restingAzimuthAngle: The resting angle for the turret's azimuth. 0.5 is normally good
+; $restingElevationAngle: The resting angle for the turret's elevation. 0.5 is normally good
+function @Turret_New($aliasPrefix: text, $invertAzimuth: number, $invertElevation: number, $invertRestingAzimuth: number, $invertRestingElevation: number, $restingAzimuthAngle: number, $restingElevationAngle: number): text
 	var $turret = ""
 	$turret.AliasPrefix = $aliasPrefix
 
 	$turret.AzimuthAlias = $aliasPrefix & "_Azimuth"
-	$turret.AzimuthPID = @PID_New(0.15, 0.05, 0.2, -1, 1)
+	$turret.AzimuthPID = @PID_New(0.2, 0, 0.05, -1, 1)
 	$turret.InvertAzimuth = $invertAzimuth
+	$turret.InvertRestingAzimuth = $invertRestingAzimuth
+	$turret.AzimuthRestingAngle = $restingAzimuthAngle
 
 	$turret.ElevationAlias = $aliasPrefix & "_Elevation"
-	$turret.ElevationPID = @PID_New(0.15, 0.05, 0.2, -1, 1)
+	$turret.ElevationPID = @PID_New(0.2, 0, 0.05, -1, 1)
 	$turret.InvertElevation = $invertElevation
+	$turret.InvertRestingElevation = $invertRestingElevation
+	$turret.ElevationRestingAngle = $restingElevationAngle
+	$turret.ElevLimitTop = 0.8 ; todo
+	$turret.ElevLimitBottom = 0.04 ; todo
 	
 	$turret.RadarAlias = $aliasPrefix & "_Radar" ; actually a beacon
 	
@@ -29,6 +39,7 @@ function @Turret_New($aliasPrefix: text, $invertAzimuth: number, $invertElevatio
 	$turret.Enabled = 0
 	$turret.Fire = 0
 	$turret.Resting = 0
+	$turret.TargetFreq = -1
 	
 	return $turret
 	
@@ -37,16 +48,6 @@ function @Turret_New($aliasPrefix: text, $invertAzimuth: number, $invertElevatio
 ; $on: Whether or not to turn the turret on
 function @Turret_Toggle($self: text, $on: number): text
 	$self.Enabled = $on
-	return $self
-
-; Rotates the turret by however much provided
-; $self: The turret object
-; $targetAzimuth: The amount to yaw
-; $targetElevation: The amount to elevate
-function @Turret_Rotate($self: text, $targetAzimuth: number, $targetElevation: number): text
-	output_number($self.AzimuthAlias, 0, if($self.InvertAzimuth, -$targetAzimuth, $targetAzimuth))
-	output_number($self.ElevationAlias, 0, if($self.InvertElevation, -$targetElevation, $targetElevation))
-	
 	return $self
 	
 ; Make a turret fire
@@ -66,6 +67,16 @@ function @Turret_GetElevation($self: text): number
 function @Turret_GetAzimuth($self: text): number
 	return input_number($self.AzimuthAlias, 0)
 
+; Rotates the turret by however much provided
+; $self: The turret object
+; $azimuth: The amount to yaw
+; $elevation: The amount to pitch
+function @Turret_Rotate($self: text, $azimuth: number, $elevation: number): text
+	output_number($self.AzimuthAlias, 0, if($self.InvertAzimuth, -$azimuth, $azimuth))
+	output_number($self.ElevationAlias, 0, if($self.InvertElevation, -$elevation, $elevation))
+	
+	return $self
+
 ; Runs the elev PID and returns the value
 ; $self: The turret object
 ; $processVariable: The value to process
@@ -75,7 +86,7 @@ function @Turret_RunElevPID($self: text, $processVariable: number, $setPoint: nu
 	$elevPID.@PID_Update($processVariable, $setPoint)
 	$self.ElevationPID = $elevPID
 	
-	return $elevPID.Value / 10
+	return $elevPID.Value / 5
 	
 ; Runs the azi PID and returns the value
 ; $self: The turret object
@@ -86,17 +97,36 @@ function @Turret_RunAziPID($self: text, $processVariable: number, $setPoint: num
 	$aziPID.@PID_Update($processVariable, $setPoint)
 	$self.AzimuthPID = $aziPID
 	
-	return $aziPID.Value / 10
+	return $aziPID.Value / 5
 
 ; Run a PID to reset turret elevation
 ; $self: The turret object
 function @Turret_ElevationResetPID($self: text): number
-	return @Turret_RunElevPID($self, @Turret_GetElevation($self) + 0.5, 0)
+	var $error = $self.ElevationRestingAngle - @Turret_GetElevation($self)
+	var $value = @Turret_RunElevPID($self, $error, 0) * clamp(abs($error) * 200, 2, 500)
+	
+	if $self.InvertRestingElevation
+		$value = -$value
+	
+	return $value
 
 ; Run a PID to reset turret azimuth
 ; $self: The turret object
 function @Turret_AzimuthResetPID($self: text): number
-	return @Turret_RunAziPID($self, @Turret_GetAzimuth($self) + 0.5, 0)
+	var $error = $self.AzimuthRestingAngle - @Turret_GetAzimuth($self)
+	var $value = @Turret_RunAziPID($self, $error, 0) * clamp(abs($error) * 200, 2, 500)
+	
+	if $self.InvertRestingAzimuth
+		$value = -$value
+	
+	return $value
+
+; Sets the turret's target
+; $self: The turret object
+; $targetFreq: The target's beacon frequency
+function @Turret_SetTarget($self: text, $targetFreq: number): text
+	$self.TargetFreq = $targetFreq
+	return $self
 
 ; Make a turret rest
 ; $self: The turret object
@@ -129,10 +159,10 @@ function @Turret_ManageAiming($self: text): text
 
 	; Calculate azimuth
 	var $nav = $self.NavInstrument
-	var $azimuth = $nav.LocatorYaw * 4
+	var $azimuth = @Turret_RunAziPID($self, -$nav.LocatorYaw, 0) * clamp(abs($nav.LocatorYaw) * 100, 100, 1000)
 
 	; Calculate elevation
-	var $elevation = -$nav.LocatorPitch * 4
+	var $elevation = @Turret_RunAziPID($self, $nav.LocatorPitch, 0) * clamp(abs($nav.LocatorPitch) * 100, 100, 1000)
 	
 	; Aim
 	$self.@Turret_Rest(0)
@@ -154,6 +184,9 @@ function @Turret_Update($self: text): text
 	$nav.@NavInstrument_SetLocate("", input_number($self.RadarAlias, 1), input_number($self.RadarAlias, 2), input_number($self.RadarAlias, 3), input_number($self.RadarAlias, 4))
 
 	$self.NavInstrument = $nav
+	
+	; Update beacon freq
+	output_number($self.RadarAlias, 2, $self.TargetFreq:number)
 
 	; Check if we're getting a signal
 	if !input_number($self.RadarAlias, 5)
