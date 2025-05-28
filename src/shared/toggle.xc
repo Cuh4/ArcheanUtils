@@ -3,10 +3,14 @@
 ; // ---------------------------------------------------------------------
 
 ; Example:
-; storage var $LightsToggle: text
-; $LightsToggle.@Toggle_New()
-; $LightsToggle.@Toggle_Pulse(1)
-; print($LightsToggle.On)
+; storage var $lightsToggle: text
+;
+; init
+; 	$lightsToggle.@Toggle_New()
+;
+; update
+; 	$lightsToggle.@Toggle_Pulse(1)
+; 	print($lightsToggle.On)
 
 ; // Main
 
