@@ -4,6 +4,25 @@
 
 ; // Main
 
+; Replaces all instances of `$target` in `$text` with `$to`
+; $text: The text to check
+; $target: The text to look for within the provided text
+; $to: The text to replace the instances of `$target` with
+function @Text_Replace($text: text, $target: text, $to: text): text
+	var $new = ""
+	var $textLength = size($text)
+	var $targetLength = size($target)
+
+	for 0, $textLength($i)
+		var $str = substring($text, $i, $targetLength)
+	
+		if $str == $target
+			$new &= $to
+		else
+			$new &= $str
+
+	return $new
+
 ; Returns whether or not a text starts with the provided prefix
 ; $text: The text to check
 ; $prefix: The prefix to check with
