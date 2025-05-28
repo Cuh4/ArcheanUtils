@@ -78,7 +78,7 @@ function @TEPClient_IsOnHold(): number
 	var $incomingData = $TEPClientBeacon.IncomingData
 	
 	if !$incomingData or !$TEPClientBeacon.IsReceiving
-		return 1
+		return 0 ; even though there is no server we are reaching for, we are technically not on hold
 	
 	var $onHold = $incomingData.OnHold
 	

@@ -30,9 +30,11 @@
 ; Dependencies: vehicle/beacon.xc, vehicle/TEProtocol_Classes.xc, vehicle/TEProtocol_Shared.xc
 
 ; // Variables
-const $TEPSERVER_OVERLOAD_CHARACTER_COUNT = 3000
-const $TEPSERVER_RESPONSE_EXPIRY_TIME = 15 ; ticks
-const $TEPSERVER_REQUEST_ACKNOWLEDGEMENT_EXPIRY_TIME = 15 ; ticks
+const $TEPSERVER_OVERLOAD_CHARACTER_COUNT = 3200 ; if $TEPServerHolds, $TEPServerResponses, etc, exceeds this character count, the server will drop incoming requests to prevent "Text too large" error
+const $TEPSERVER_RESPONSE_EXPIRY_TIME = 7 ; ticks. how long it takes for a response to expire
+const $TEPSERVER_REQUEST_ACKNOWLEDGEMENT_EXPIRY_TIME = 7 ; ticks. how long it takes for a request acknowledgement to expire
+const $TEPSERVER_ONHOLD_RANDOM_MIN = 2 ; minimum time in ticks for randomized client hold
+const $TEPSERVER_ONHOLD_RANDOM_MAX = 5 ; maximum time in ticks for randomized client hold
 
 var $TEPServerBeacon: text ; The beacon in-use for TEP
 var $TEPServerFrequency: number ; The frequency to listen on (add 1 for transmit frequency)
@@ -56,11 +58,11 @@ function @TEPServer_Log($level: text, $content: text)
 function @TEPServer_SetClientOnHold($clientID: text, $duration: number)
 	var $hold = $TEPServerHolds.$clientID
 
-	if $hold and ($hold.Duration: number) == $duration
+	if $hold
 		return
 
 	$TEPServerHolds.$clientID = @TEPHold_New($duration)
-	@TEPServer_Log($TEP_LOG_LEVEL_ENUM.INFO, text("Placed client {} on hold for {0.00}s", $clientID, $duration))
+	@TEPServer_Log($TEP_LOG_LEVEL_ENUM.INFO, text("Placed client {} on hold for {0} ticks", $clientID, $duration))
 
 ; Puts a client off hold
 ; $clientID: The client's ID
@@ -129,8 +131,10 @@ function @_TEPServer_HandleIncomingRequest()
 	; Add to array
 	$TEPRequestsAwaitingResponse.$requestID = $request
 	
-	; Don't let client hog requests
-	@TEPServer_SetClientOnHold($request.ClientID, random(0.05, 0.2))
+	; Don't let closer clients hog requests by telling them to stop
+	; transmitting for a little bit (closer signals on same frequency
+	; take priority in Archean, so this is to account for that)
+	@TEPServer_SetClientOnHold($request.ClientID, random($TEPSERVER_ONHOLD_RANDOM_MIN, $TEPSERVER_ONHOLD_RANDOM_MAX))
 	
 ; Removes all expired client holds
 function @_TEPServer_RemoveExpiredHolds()

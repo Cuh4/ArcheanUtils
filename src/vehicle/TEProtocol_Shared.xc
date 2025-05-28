@@ -25,7 +25,7 @@ function @TEP_Log($side: text, $level: text, $content: text)
 	
 ; Generates and returns a unique ID
 function @TEP_GetUUID(): text
-	return "ID" & (round(time * 1000): text) & "-" & (random(100000, 999999): text)
+	return "ID" & substring(round((random(1, 10000) * time * 10000)): text, 5, 100)
 	
 ; Removes a value from a key-value pair
 ; $text: The key-value pair text
