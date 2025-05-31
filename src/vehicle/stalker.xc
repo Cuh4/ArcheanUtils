@@ -128,6 +128,9 @@ function @Stalker_Update($self: text): text
 		; Set frequency for next tick
 		output_number($alias, 2, $nextFrequency)
 		
+		; Hide beacon
+		output_text($alias, 1, "")
+		
 	; Increment frequency
 	$self.At++
 
