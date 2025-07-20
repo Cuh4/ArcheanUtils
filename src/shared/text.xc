@@ -76,7 +76,7 @@ function @Text_Truncate($text: text, $limit: number, $ending: text): text
 ; $text: The text to search
 ; $search: The given search string
 ; $n: The number that determines which occurrence we're looking for
-function @Text_Get_Nth_Index_Of($text: text, $search: text, $n: number): number
+function @Text_GetNthIndexOf($text: text, $search: text, $n: number): number
 	if $n == 0
 		return 0
 	var $index = 0
@@ -100,8 +100,7 @@ function @Text_Get_Nth_Index_Of($text: text, $search: text, $n: number): number
 ; $text: The text that is being split
 ; $splitter: The split string
 ; $n: The number that determines which occurrence we're looking for
-
-function @Text_Get_Nth_Split_Chunk($text: text, $splitter: text, $n: number): text
+function @Text_GetNthSplitChunk($text: text, $splitter: text, $n: number): text
 	if @Text_Count($text, $splitter) < $n
 		return "INVALID"
 	var $startIndex = @Text_Get_Nth_Index_Of($text, $splitter, $n)
