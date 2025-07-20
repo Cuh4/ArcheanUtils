@@ -70,3 +70,45 @@ function @Text_Truncate($text: text, $limit: number, $ending: text): text
 		return substring($text, 0, $trueLimit) & $ending
 		
 	return $text
+
+
+; Returns the index of the n-th occurrence of the given search string
+; $text: The text to search
+; $search: The given search string
+; $n: The number that determines which occurrence we're looking for
+function @Text_GetNthIndexOf($text: text, $search: text, $n: number): number
+	if $n == 0
+		return 0
+	var $index = 0
+	while $index < size($text) && $n > 0
+		if $text.$index != $search.0
+			$index++
+		else
+			var $nextTextBlock = substring($text, $index, size($search))
+			if $nextTextBlock == $search
+				$n--
+				if $n > 0
+					$index += size($search)
+	if $n > 0
+		return -1
+	else
+		return $index
+
+
+; Returns what is between the n-th and n+1-th occurrence of the $splitter string
+; If the splitter is not contained at least n+1 times, "INVALID" is returned instead
+; $text: The text that is being split
+; $splitter: The split string
+; $n: The number that determines which occurrence we're looking for
+function @Text_GetNthSplitChunk($text: text, $splitter: text, $n: number): text
+	if @Text_Count($text, $splitter) < $n
+		return "INVALID"
+	var $startIndex = @Text_Get_Nth_Index_Of($text, $splitter, $n)
+	if $n > 0
+		$startIndex++
+	var $endIndex = @Text_Get_Nth_Index_Of($text, $splitter, $n+1) - 1
+
+	if $startIndex < 0
+		return "INVALID"
+
+	return @Text_Substring($text, $startIndex, $endIndex)
